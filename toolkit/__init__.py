@@ -10,8 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from scipy import misc
-
 
 def plot(x):
     plt.figure()
@@ -55,23 +53,24 @@ def choose_file():
     root = tkinter.Tk()
     root.withdraw()
     file = filedialog.askopenfilename(title='Please select file')
+    root.destroy()
     return file
 
 
-def file_search(path,filter='*'):
-    '''This function searchs for files match provided filter in provided folder, and returns the absolute path to these files with a list of `pathlib.Path` objects.
+def file_search(path, pattern='*'):
+    '''This function searchs for files match provided pattern in provided folder, and returns the absolute path to these files with a list of `pathlib.Path` objects.
     Parameters
     ----------
     - path : pathlib object or str
         Search files in this folder
-    - filter : str
+    - pattern : str
         Pattern for `fnmatch.filter` to look for target files. Default '*' returns all files regardless of the file type.
     Returns
     -------
     files : List of `pathlib` objects to files in pathlib format
     '''
     pathP = Path(path) # making sure it is pathlib class object, and use it later.
-    files = fnmatch.filter(os.listdir(pathP),filter) # find files that matches the filter
+    files = fnmatch.filter(os.listdir(pathP), pattern) # find files that matches the pattern
     if len(files)==0:
         print('------------------------'
               '\nWarning: No files found\n'
@@ -122,7 +121,7 @@ def class_to_dict(obj):
         for key, value in obj.items():
             obj[key] = class_to_dict(value)
         return obj
-    except:
+    except AttributeError:
         return obj
 
 
@@ -144,7 +143,7 @@ def load_object(fname=''):
             obj = pickle.load(input)
             if isinstance(obj, dict):
                 obj = dict_to_class(obj)
-        except: # if it is an image
+        except (pickle.UnpicklingError, EOFError, AttributeError, ImportError): # if it is an image
             obj = imageio.imread(input)
     return obj
 
@@ -257,7 +256,7 @@ def save_recon(save_path, recon):
             plt.savefig(path/ ('recon_bar_{}_{}.tif'.format(i, dt)))
 
     if recon.ndim == 2: # todo
-        imageio.imwrite(path /('recon_{}.tif'.format(dt), recon.astype(np.float32)))
+        imageio.imwrite(path / 'recon_{}.tif'.format(dt), recon.astype(np.float32))
 
     return
 

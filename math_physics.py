@@ -71,13 +71,48 @@ class Constants:
                     10.070000, 11.700000, 15.400000, 18.900000,
                     20.400000, 19.799999, 13.600000, 13.511000,
                     0.000000, 0.000000, 0.000000, 0.000000]
+    fullnames = ['Hydrogen', 'Helium', 'Lithium', 'Beryllium',
+                  'Boron', 'Carbon', 'Nitrogen', 'Oxygen',
+                  'Fluorine', 'Neon', 'Sodium', 'Magnesium',
+                  'Aluminum', 'Silicon', 'Phosphorus', 'Sulfur',
+                  'Chlorine', 'Argon', 'Potassium', 'Calcium',
+                  'Scandium', 'Titanium', 'Vanadium', 'Chromium',
+                  'Manganese', 'Iron', 'Cobalt', 'Nickel',
+                  'Copper', 'Zinc', 'Gallium', 'Germanium',
+                  'Arsenic', 'Selenium', 'Bromine', 'Krypton',
+                  'Rubidium', 'Strontium', 'Yttrium', 'Zirconium',
+                  'Niobium', 'Molybdenum', 'Technetium', 'Ruthenium',
+                  'Rhodium', 'Palladium', 'Silver', 'Cadmium',
+                  'Indium', 'Tin', 'Antimony', 'Tellurium',
+                  'Iodine', 'Xenon', 'Cesium', 'Barium',
+                  'Lanthanum', 'Cerium', 'Praseodymium', 'Neodymium',
+                  'Promethium', 'Samarium', 'Europium', 'Gadolinium',
+                  'Terbium', 'Dysprosium', 'Holmium', 'Erbium',
+                  'Thulium', 'Ytterbium', 'Lutetium', 'Hafnium',
+                  'Tantalum', 'Tungsten', 'Rhenium', 'Osmium',
+                  'Iridium', 'Platinum', 'Gold', 'Mercury',
+                  'Thallium', 'Lead', 'Bismuth', 'Polonium',
+                  'Astatine', 'Radon', 'Francium', 'Radium',
+                  'Actinium', 'Thorium', 'Protactinium', 'Uranium',
+                  'Neptunium', 'Plutonium', 'Americium', 'Curium',
+                  'Berkelium', 'Californium', 'Einsteinium', 'Fermium']
+    lineno = [1, 31, 61, 90, 119, 148, 178, 208, 237, 266,
+              297, 326, 355, 385, 414, 443, 472, 501, 530, 559,
+              588, 616, 644, 673, 701, 729, 758, 787, 817, 846,
+              877, 908, 939, 970, 1001, 1033, 1065, 1097, 1129, 1161,
+              1192, 1224, 1256, 1288, 1320, 1352, 1384, 1416, 1449, 1482,
+              1515, 1548, 1581, 1616, 1651, 1684, 1717, 1752, 1788, 1824,
+              1859, 1895, 1928, 1964, 1999, 2034, 2069, 2104, 2139, 2171,
+              2203, 2235, 2267, 2300, 2333, 2365, 2397, 2429, 2462, 2494,
+              2526, 2559, 2592, 2628, 2661, 2694, 2727, 2760, 2793, 2826,
+              2858, 2890, 2923, 2955, 2988, 3021, 3054, 3087, 3120, 3155]
     atom_mass_unit = 1.6606 * 10**(-24) # grams. atom mass unit
     electron_radius = 2.8179 * 10**(-13) # cm. Classical electron radius
     h = C.h # Planck constant. Joer*s
     c = C.c # speed of light. meter/s
     eV = C.eV # eV to Joer
     a0 = 5.4305  # Unit: Angstroms ##silicon crystal unit cell length at 300K.
-                                                            ## This is usually used as the internal standard for silicon
+                 # This is usually used as the internal standard for silicon
 
 
 def fwhm(x,y,Verbose=False):
@@ -210,106 +245,11 @@ def element_info(element_name,no_whine=False):
     :return:
     '''
 
-    elements = ['H', 'HE', 'LI', 'BE', 'B', 'C', 'N', 'O', 'F', 'NE',
-                'NA', 'MG', 'AL', 'SI', 'P', 'S', 'CL', 'AR', 'K', 'CA',
-                'SC', 'TI', 'V', 'CR', 'MN', 'FE', 'CO', 'NI', 'CU', 'ZN',
-                'GA', 'GE', 'AS', 'SE', 'BR', 'KR', 'RB', 'SR', 'Y', 'ZR',
-                'NB', 'MO', 'TC', 'RU', 'RH', 'PD', 'AG', 'CD', 'IN', 'SN',
-                'SB', 'TE', 'I', 'XE', 'CS', 'BA', 'LA', 'CE', 'PR', 'ND',
-                'PM', 'SM', 'EU', 'GD', 'TB', 'DY', 'HO', 'ER', 'TM', 'YB',
-                'LU', 'HF', 'TA', 'W', 'RE', 'OS', 'IR', 'PT', 'AU', 'HG',
-                'TL', 'PB', 'BI', 'PO', 'AT', 'RN', 'FR', 'RA', 'AC', 'TH',
-                'PA', 'U', 'NP', 'PU', 'AM', 'CM', 'BK', 'CF', 'ES', 'FM']
-
-    lineno = [1, 31, 61, 90, 119, 148, 178, 208, 237, 266,
-              297, 326, 355, 385, 414, 443, 472, 501, 530, 559,
-              588, 616, 644, 673, 701, 729, 758, 787, 817, 846,
-              877, 908, 939, 970, 1001, 1033, 1065, 1097, 1129, 1161,
-              1192, 1224, 1256, 1288, 1320, 1352, 1384, 1416, 1449, 1482,
-              1515, 1548, 1581, 1616, 1651, 1684, 1717, 1752, 1788, 1824,
-              1859, 1895, 1928, 1964, 1999, 2034, 2069, 2104, 2139, 2171,
-              2203, 2235, 2267, 2300, 2333, 2365, 2397, 2429, 2462, 2494,
-              2526, 2559, 2592, 2628, 2661, 2694, 2727, 2760, 2793, 2826,
-              2858, 2890, 2923, 2955, 2988, 3021, 3054, 3087, 3120, 3155]
-
-    fullnames = [ 'Hydrogen'    , 'Helium'      , 'Lithium'     , 'Beryllium'   ,
-                  'Boron'       , 'Carbon'      , 'Nitrogen'    , 'Oxygen'      ,
-                  'Fluorine'    , 'Neon'        , 'Sodium'      , 'Magnesium'   ,
-                  'Aluminum'    , 'Silicon'     , 'Phosphorus'  , 'Sulfur'      ,
-                  'Chlorine'    , 'Argon'       , 'Potassium'   , 'Calcium'     ,
-                  'Scandium'    , 'Titanium'    , 'Vanadium'    , 'Chromium'    ,
-                  'Manganese'   , 'Iron'        , 'Cobalt'      , 'Nickel'      ,
-                  'Copper'      , 'Zinc'        , 'Gallium'     , 'Germanium'   ,
-                  'Arsenic'     , 'Selenium'    , 'Bromine'     , 'Krypton'     ,
-                  'Rubidium'    , 'Strontium'   , 'Yttrium'     , 'Zirconium'   ,
-                  'Niobium'     , 'Molybdenum'  , 'Technetium'  , 'Ruthenium'   ,
-                  'Rhodium'     , 'Palladium'   , 'Silver'      , 'Cadmium'     ,
-                  'Indium'      , 'Tin'         , 'Antimony'    , 'Tellurium'   ,
-                  'Iodine'      , 'Xenon'       , 'Cesium'      , 'Barium'      ,
-                  'Lanthanum'   , 'Cerium'      , 'Praseodymium', 'Neodymium'   ,
-                  'Promethium'  , 'Samarium'    , 'Europium'    , 'Gadolinium'  ,
-                  'Terbium'     , 'Dysprosium'  , 'Holmium'     , 'Erbium'      ,
-                  'Thulium'     , 'Ytterbium'   , 'Lutetium'    , 'Hafnium'     ,
-                  'Tantalum'    , 'Tungsten'    , 'Rhenium'     , 'Osmium'      ,
-                  'Iridium'     , 'Platinum'    , 'Gold'        , 'Mercury'     ,
-                  'Thallium'    , 'Lead'        , 'Bismuth'     , 'Polonium'    ,
-                  'Astatine'    , 'Radon'       , 'Francium'    , 'Radium'      ,
-                  'Actinium'    , 'Thorium'     , 'Protactinium', 'Uranium'     ,
-                  'Neptunium'   , 'Plutonium'   , 'Americium'   , 'Curium'      ,
-                  'Berkelium'   , 'Californium' , 'Einsteinium' , 'Fermium'     ]
-
-    #The atomic weights of the elements
-    atom_weights = [ 1.0079000,      4.0026002,      6.9410000,      9.0121803,
-                    10.8100004,     12.0109997,     14.0066996,     15.9994001,
-                    18.9984035,     20.1790009,     22.9897709,     24.3050003,
-                    26.9815407,     28.0855007,     30.9737606,     32.0600014,
-                    35.4529991,     39.9480019,     39.0983009,     40.0800018,
-                    44.9558983,     47.9000015,     50.9415016,     51.9959984,
-                    54.9379997,     55.8470001,     58.9332008,     58.7000008,
-                    63.5460014,     65.3799973,     69.7200012,     72.5899963,
-                    74.9216003,     78.9599991,     79.9039993,     83.8000031,
-                    85.4677963,     87.6200027,     88.9058990,     91.2200012,
-                    92.9064026,     95.9400024,     98.0000000,    101.0699997,
-                   102.9055023,    106.4000015,    107.8679962,    112.4100037,
-                   114.8199997,    118.6900024,    121.7500000,    127.5999985,
-                   126.9045029,    131.3000031,    132.9053955,    137.3300018,
-                   138.9055023,    140.1199951,    140.9076996,    144.2400055,
-                   145.0000000,    150.3999939,    151.9600067,    157.2500000,
-                   158.9253998,    162.5000000,    164.9304047,    167.2599945,
-                   168.9342041,    173.0399933,    174.9669952,    178.4900055,
-                   180.9479065,    183.8500061,    186.2070007,    190.1999969,
-                   192.2200012,    195.0899963,    196.9665070,    200.5899963,
-                   204.3699951,    207.1999969,    208.9803925,    209.0000000,
-                   210.0000000,    222.0000000,    223.0000000,    226.0254059,
-                   227.0278015,    232.0381012,    231.0359039,    238.0290070,
-                   237.0482025,    244.0000000,    243.0000000,    247.0000000,
-                   247.0000000,    251.0000000,    252.0000000,    257.0000000]
-    #The density of the elements if needed
-    element_dens = [0.000090,       0.000179,       0.530000,       1.850000,
-                    2.340000,       2.620000,       0.001251,       0.001429,
-                    0.001696,       0.000901,       0.970000,       1.740000,
-                    2.700000,       2.330000,       1.820000,       2.070000,
-                    0.003170,       0.001784,       0.860000,       1.550000,
-                    3.000000,       4.500000,       5.800000,       7.190000,
-                    7.430000,       7.860000,       8.900000,       8.900000,
-                    8.960000,       7.140000,       5.910000,       5.320000,
-                    5.720000,       4.800000,       3.120000,       0.003740,
-                    1.530000,       2.600000,       4.500000,       6.490000,
-                    8.550000,      10.200000,      11.500000,      12.200000,
-                   12.400000,      12.000000,      10.500000,       8.650000,
-                    7.310000,       7.300000,       6.680000,       6.240000,
-                    4.920000,       0.005890,       1.870000,       3.500000,
-                    6.700000,       6.780000,       6.770000,       7.000000,
-                    6.475000,       7.540000,       5.260000,       7.890000,
-                    8.270000,       8.540000,       8.800000,       9.050000,
-                    9.330000,       6.980000,       9.840000,      13.100000,
-                   16.600000,      19.299999,      21.000000,      22.400000,
-                   22.500000,      21.400000,      19.299999,      13.530000,
-                   11.850000,      11.400000,       9.800000,       9.400000,
-                    0.000000,       0.009910,       0.000000,       5.000000,
-                   10.070000,      11.700000,      15.400000,      18.900000,
-                   20.400000,      19.799999,      13.600000,      13.511000,
-                    0.000000,       0.000000,       0.000000,       0.000000]
+    elements = Constants.elements
+    fullnames = Constants.fullnames
+    lineno = Constants.lineno
+    atom_weights = Constants.atom_weights
+    element_dens = Constants.element_density
 
     df = pd.DataFrame.from_dict({'Elements':elements,'FullNames':fullnames,'Lineno':lineno,
                                  'AtomWeights':atom_weights,'ElementDens':element_dens})
@@ -352,12 +292,12 @@ def molar_mass(name,Verbose=False):
             if not all[i].isdigit():
                 try:
                     total_mass+= atom_weights[all[i].upper()]
-                except:
+                except KeyError:
                     raise Exception('No such element:'+str(all[i]))
             else:
                 number= float(all[i])-1
                 total_mass+=(atom_weights[all[i-1].upper()]*number)
-    except: # Find the name of the compound in "composit.dat", and use the molecular information
+    except (KeyError, Exception): # Find the name of the compound in "composit.dat", and use the molecular information
             # provided there to calculate molar mass.
         total_mass = 0
         with open(Path('MU/COMPOSIT.DAT'), 'r') as file:
@@ -691,7 +631,7 @@ def murho_selenium_compounds(name, energies, interpol_kind='linear'):
     murho_e1 = murho(name, e1)
     try:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': e1, 'murho': murho_e1})
-    except:
+    except ValueError:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': [e1], 'murho': [murho_e1]})
 
     df1 = dataframe_murho_e1[dataframe_murho_e1.energy < e2[0]]  # where energy < e2[first]
@@ -742,7 +682,7 @@ def murho_from_file(name,file_name, energies, interpol_kind='linear'):
     murho_e1 = murho(name, e1, use_file=False)
     try:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': e1, 'murho': murho_e1})
-    except:
+    except ValueError:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': [e1], 'murho': [murho_e1]})
 
     df1 = dataframe_murho_e1[dataframe_murho_e1.energy < e2[0]]  # where energy < e2[first]

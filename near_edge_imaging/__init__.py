@@ -17,37 +17,27 @@ from pathlib import Path
 #            'nei_get_arrangement','read_average_tifs','get_tomo_files','nei_determine_murhos',
 #            'get_beam_files','nei','beam_near_edge_imaging', 'nei_beam_parameters',]
 
-def define_materials(materials_filename):
-    from pathlib2 import Path
+def read_materials_file(filename):
+    """Read a materials file from the MU/materials directory."""
     import re
+    with open(Path('MU/materials/' + filename + '.txt'), 'r') as file:
+        content = file.read().upper()
+    materials = re.split(r'\s*\n\s*', content)
+    return materials
 
-    def read_default():
-        with open(Path('MU/materials/default.txt'), 'r') as file:
-            content = file.read().upper()
-        materials = re.split('\s*\n\s*', content)
-        return materials
 
-    def read_materials_file(filename):
-        with open(Path('MU/materials/' + filename + '.txt'), 'r') as file:
-            content = file.read().upper()
-        materials = re.split('\s*\n\s*', content)
-        return materials
+def write_materials_file(materials, filename):
+    """Write materials to a file in the MU/materials directory."""
+    filename = filename.lower()
+    with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
+        if isinstance(materials, str):
+            file.write(materials)
+        else:
+            file.write('\n'.join(materials))
 
-    def input_materials():
-        materials = input('\nPlease input the names of the materials to investigate.\n'
-                          'For example: K2SeO4 Se-Meth, Water\n'
-                          'Or press Enter to skip\n')
-        materials = re.findall(r"[\w'-]+", materials)
-        return materials
 
-    def write_materials_file(materials, filename):
-        filename = filename.lower()
-        with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
-            if type(materials) == 'str':
-                file.write(materials)
-            else:
-                file.write('\n'.join(materials))
-        return
+def define_materials(materials_filename):
+    import re
 
     class gui_get_materials:
         """docstring"""
@@ -128,7 +118,7 @@ def define_materials(materials_filename):
             materials = read_materials_file(materials_filename.lower())
             if len(materials) == 0:
                 raise Exception('The specified file is EMPTY.')
-        except:
+        except (FileNotFoundError, Exception):
             print(materials_filename + '.txt cannot be read in properly.\nPlease define in the pop-up window')
             gui_get_materials()
             materials = read_materials_file('last')
@@ -215,7 +205,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
             energy_range_low = float(data['energy_range_low'])
             energy_range_high = float(data['energy_range_high'])
 
-            self.diffaction_plane = data['diffraction_plane']
+            self.diffraction_plane = data['diffraction_plane']
             self.type = data['type']
             self.chi_degrees = float(data['chi_degrees'])
             self.hkl = [h, k, l]
@@ -410,7 +400,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
 
             ######################### get the values  ####################
 
-            # self.diffaction_plane = self.diffPlane.get()
+            # self.diffraction_plane = self.diffPlane.get()
             # self.type = self.aName.get()
             # self.chi_degrees = self.chi.get()
             # self.hkl = [self.h.get(), self.k.get(), self.l.get()]
@@ -432,7 +422,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
             # mainloop()
 
         def confirm(self):
-            #     self.diffaction_plane = self.diffPlane
+            #     self.diffraction_plane = self.diffPlane
             #     self.type = self.aName
             #     self.chi_degrees = self.chi
             #     self.hkl = [self.h, self.k, self.l]
@@ -470,7 +460,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
     if arrangement_type == 'file':
         try:
             arrangement = get_arrangement(path)
-        except:
+        except (FileNotFoundError, KeyError, Exception):
             # window for get_arrangement
             print(
                 '(nei_get_arrangement)The "arrangement.dat" file either does not exist in the specified directory, or has errors in it.\n'
@@ -483,7 +473,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
         arrangement = get_arrangement(save_path)
         print(save_path)
 
-    arrangement_parameters = {'diffaction_plane': ' DIFFRACTION PLANE:',
+    arrangement_parameters = {'diffraction_plane': ' DIFFRACTION PLANE:',
                               'type': ' TYPE:',
                               'chi_degrees': ' ASYMMETRY ANGLE (CHI):',
                               'hkl': ' HKL:',
@@ -880,7 +870,7 @@ def beam_edges(flat_dark, threshold, no_fit=False, Verbose=False, poly_deg=5):
     for ind_x in range(nx):  # loop through x axis
         try:
             y_peak, y_top, y_bot = find_peak(flat_dark, ind_x)
-        except:
+        except (ValueError, RuntimeError):
             y_peak, y_top, y_bot = find_peak(flat_dark, ind_x - 1)
         top_positions.append(y_top)
         bot_positions.append(y_bot)
@@ -1083,8 +1073,8 @@ def calculate_rhot(mu_rhos, mu_t, beam, names, algorithm='', use_torch=True):
         use_torch = False
 
     if algorithm == '':
-        algorithm = input('Choose algorithm from:  "nnls", "sKES_equation"\n'
-                          '(type and enter): ')
+        algorithm = 'sKES_equation'
+        print('(calculate_rhot) No algorithm specified, defaulting to "sKES_equation"')
 
     nm = mu_rhos.shape[0]  # number of materials
 
@@ -1095,7 +1085,7 @@ def calculate_rhot(mu_rhos, mu_t, beam, names, algorithm='', use_torch=True):
         nx = mu_t.shape[2]
         rho_t = np.zeros(shape=(nm, n_tomo, nx))
         counter = 0
-        start_time = time.clock()
+        start_time = time.perf_counter()
         print('(calculate_rhot) Started calculating RHO_T with linear regression')
         print('                 ', end='')
         for t in range(n_tomo):
@@ -1113,7 +1103,7 @@ def calculate_rhot(mu_rhos, mu_t, beam, names, algorithm='', use_torch=True):
                 counter += 1
         print('\n                 Finished calculation for'
               '\n                 ', n_tomo, ' tomo files in',
-              round(time.clock() - start_time, 2), 'seconds')
+              round(time.perf_counter() - start_time, 2), 'seconds')
 
 
     elif algorithm == 'sKES_equation':
@@ -1201,7 +1191,7 @@ def signal_noise_ratio(mu_rhos, mu_t, rho_t, beam_parameters, tomo_data, use_tor
     """
     try:
         import torch
-    except:
+    except ImportError:
         print('(signal_noise_ratio) Module pytorch is not available. Numpy will be used instead.')
         use_torch = False
 
@@ -1328,24 +1318,24 @@ def idl_recon(sinogram, pixel_size, center=0):
     return recon
 
 
-def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter='ramp', center=0, degrees=180, circle=True):
+def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter_name='ramp', center=0, degrees=180, circle=True):
     """
     CT reconstruction using Inverse Radon Transform, with Filtered Back Projection algorithm.
     See "radon_transform" in skimage.transform for more detail.
     Parameters
     ----------
     sinogram : 3d or 2d-array [(n_something),n_projections (n_angles),n_horizontal_positions]
-    pixel_size : float. 
+    pixel_size : float.
         Pixel size (resolution) of the detector in centimeter. For example: 0.0009 for 9um.
-    output_size : int, optional. 
+    output_size : int, optional.
         The width of the output reconstruction image. If output_size not specified, use the image horizontal width.
-    filter : str, default 'ramp'. 
+    filter_name : str, default 'ramp'.
         The filter used for reconstruction. Please see "radon_transform" in skimage.transform for more detail. Todo: reference to radon_transform
-    center : int, default 0. 
+    center : int, default 0.
         The rotation center in pixel during CT imaging. If 0, the horizontal center pixel in the image is used as the rotation center. Positive integer means the number of pixels to the right of the horizontal center of the image. Negative integer means the number of pixels to the left of the horizontal center of the image
-    degrees : int, {180,360}. 
+    degrees : int, {180,360}.
         Either a 180 degree CT or a 360 degree CT.
-    circle : bool, optional. 
+    circle : bool, optional.
         Assume the reconstructed image is zero outside the inscribed circle. The default behavior (None) is equivalent to False.
     Returns
     -------
@@ -1359,7 +1349,7 @@ def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter='ramp', cen
         recon = []
         for i in range(sinogram.shape[0]):
             recon.append(skimage_recon(sinogram[i], pixel_size=pixel_size,
-                                       output_size=output_size, filter=filter, center=center,
+                                       output_size=output_size, filter_name=filter_name, center=center,
                                        circle=circle))
         recon = np.array(recon)
         return recon
@@ -1377,7 +1367,7 @@ def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter='ramp', cen
         output_size = sinogram.shape[1]
     sinogram = sinogram.transpose(1, 0)  # transpose row and column to meet the order in skimage.transform.
     theta = np.linspace(0, degrees, n_proj)  # make the angles of projections from 0 to 180 degree
-    recon = iradon(sinogram, theta=theta, output_size=output_size, filter=filter, circle=circle) #center_drift=center
+    recon = iradon(sinogram, theta=theta, output_size=output_size, filter=filter_name, circle=circle) #center_drift=center
     # correct result with pixel size (cm).
     recon = recon / pixel_size
     print('...Finished')
@@ -1428,7 +1418,7 @@ def auto_center(data, rotation_degree=180):
             area = (a - a.min()).sum()
             areas.append(area)
     else:
-        raise ('`rotation_degree` should be either 180 or 360.')
+        raise ValueError('`rotation_degree` should be either 180 or 360.')
     drift = drifts[np.array(areas).argmax()]
     return (drift)
 

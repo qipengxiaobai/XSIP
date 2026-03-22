@@ -8,36 +8,8 @@ from matplotlib.figure import Figure
 import threading
 
 
-def read_default():
-    with open(Path('MU/materials/default.txt'), 'r') as file:
-        content = file.read().upper()
-    materials = re.split('\s*\n\s*', content)
-    return materials
 
-
-def read_materials_file(filename,verbose=False):
-    with open(Path('MU/materials/' + filename + '.txt'), 'r') as file:
-        content = file.read().upper()
-    materials = re.split('\s*\n\s*', content)
-    return materials
-
-
-def input_materials():
-    materials = input('\nPlease input the names of the materials to investigate.\n'
-                      'For example: K2SeO4 Se-Meth, Water\n'
-                      'Or press Enter to skip\n')
-    materials = re.findall(r"[\w'-]+", materials)
-    return materials
-
-
-def write_materials_file(materials, filename):
-    filename = filename.lower()
-    with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
-        if type(materials) == 'str':
-            file.write(materials)
-        else:
-            file.write('\n'.join(materials))
-    return
+# read_materials_file and write_materials_file are imported from near_edge_imaging via nei
 
 
 class gui_get_materials:
@@ -289,7 +261,7 @@ class gui_get_arrangement():
 
         ######################### get the values  ####################
 
-        # self.diffaction_plane = self.diffPlane.get()
+        # self.diffraction_plane = self.diffPlane.get()
         # self.type = self.aName.get()
         # self.chi_degrees = self.chi.get()
         # self.hkl = [self.h.get(), self.k.get(), self.l.get()]
@@ -311,7 +283,7 @@ class gui_get_arrangement():
         master.mainloop()
 
     def confirm(self):
-        #     self.diffaction_plane = self.diffPlane
+        #     self.diffraction_plane = self.diffPlane
         #     self.type = self.aName
         #     self.chi_degrees = self.chi
         #     self.hkl = [self.h, self.k, self.l]
@@ -805,7 +777,7 @@ class NearEdgeImaging:
             ct_center = self.center.get()
             snr = self.snr.get()
             _ = nei(materials=materials,data_path=data_path, save_path=save_path, n_proj=n_proj, algorithm=algorithm,
-                    multislice=multislice, slice=slice, ct=ct, side_width=side_width,
+                    multislice=multislice, slice_num=slice, ct=ct, side_width=side_width,
                     e_range=energy_range, lowpass=lowpass, use_torch=use_torch, use_file=use_file,
                     fix_vertical_motion=fix_vertical_motion, reconstruction=reconstruction,
                     ct_center=ct_center, snr=snr)
