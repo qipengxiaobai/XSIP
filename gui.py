@@ -33,7 +33,7 @@ def input_materials():
 def write_materials_file(materials, filename):
     filename = filename.lower()
     with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
-        if type(materials) == 'str':
+        if isinstance(materials, str):
             file.write(materials)
         else:
             file.write('\n'.join(materials))

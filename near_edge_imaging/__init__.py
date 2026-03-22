@@ -43,7 +43,7 @@ def define_materials(materials_filename):
     def write_materials_file(materials, filename):
         filename = filename.lower()
         with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
-            if type(materials) == 'str':
+            if isinstance(materials, str):
                 file.write(materials)
             else:
                 file.write('\n'.join(materials))
@@ -1095,7 +1095,7 @@ def calculate_rhot(mu_rhos, mu_t, beam, names, algorithm='', use_torch=True):
         nx = mu_t.shape[2]
         rho_t = np.zeros(shape=(nm, n_tomo, nx))
         counter = 0
-        start_time = time.clock()
+        start_time = time.perf_counter()
         print('(calculate_rhot) Started calculating RHO_T with linear regression')
         print('                 ', end='')
         for t in range(n_tomo):
@@ -1113,7 +1113,7 @@ def calculate_rhot(mu_rhos, mu_t, beam, names, algorithm='', use_torch=True):
                 counter += 1
         print('\n                 Finished calculation for'
               '\n                 ', n_tomo, ' tomo files in',
-              round(time.clock() - start_time, 2), 'seconds')
+              round(time.perf_counter() - start_time, 2), 'seconds')
 
 
     elif algorithm == 'sKES_equation':
@@ -1428,7 +1428,7 @@ def auto_center(data, rotation_degree=180):
             area = (a - a.min()).sum()
             areas.append(area)
     else:
-        raise ('`rotation_degree` should be either 180 or 360.')
+        raise ValueError('`rotation_degree` should be either 180 or 360.')
     drift = drifts[np.array(areas).argmax()]
     return (drift)
 

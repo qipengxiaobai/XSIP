@@ -257,7 +257,7 @@ def save_recon(save_path, recon):
             plt.savefig(path/ ('recon_bar_{}_{}.tif'.format(i, dt)))
 
     if recon.ndim == 2: # todo
-        imageio.imwrite(path /('recon_{}.tif'.format(dt), recon.astype(np.float32)))
+        imageio.imwrite(path / 'recon_{}.tif'.format(dt), recon.astype(np.float32))
 
     return
 
