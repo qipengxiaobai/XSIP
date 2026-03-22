@@ -352,12 +352,12 @@ def molar_mass(name,Verbose=False):
             if not all[i].isdigit():
                 try:
                     total_mass+= atom_weights[all[i].upper()]
-                except:
+                except KeyError:
                     raise Exception('No such element:'+str(all[i]))
             else:
                 number= float(all[i])-1
                 total_mass+=(atom_weights[all[i-1].upper()]*number)
-    except: # Find the name of the compound in "composit.dat", and use the molecular information
+    except (KeyError, Exception): # Find the name of the compound in "composit.dat", and use the molecular information
             # provided there to calculate molar mass.
         total_mass = 0
         with open(Path('MU/COMPOSIT.DAT'), 'r') as file:
@@ -691,7 +691,7 @@ def murho_selenium_compounds(name, energies, interpol_kind='linear'):
     murho_e1 = murho(name, e1)
     try:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': e1, 'murho': murho_e1})
-    except:
+    except ValueError:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': [e1], 'murho': [murho_e1]})
 
     df1 = dataframe_murho_e1[dataframe_murho_e1.energy < e2[0]]  # where energy < e2[first]
@@ -742,7 +742,7 @@ def murho_from_file(name,file_name, energies, interpol_kind='linear'):
     murho_e1 = murho(name, e1, use_file=False)
     try:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': e1, 'murho': murho_e1})
-    except:
+    except ValueError:
         dataframe_murho_e1 = pd.DataFrame.from_dict({'energy': [e1], 'murho': [murho_e1]})
 
     df1 = dataframe_murho_e1[dataframe_murho_e1.energy < e2[0]]  # where energy < e2[first]

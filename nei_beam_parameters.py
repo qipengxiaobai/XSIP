@@ -88,7 +88,7 @@ def nei_beam_parameters(beam_files, setup, detector, fix_vertical_motion=False,
     for x in range(nx):
         try:
             conv = do_convolve(x,deriv_all,conv_filter)
-        except:
+        except (ValueError, IndexError):
             conv = do_convolve(x-1,deriv_all,conv_filter)
 
         deriv_conv.append(conv)

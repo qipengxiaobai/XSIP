@@ -18,7 +18,7 @@ from pathlib import Path
 #            'get_beam_files','nei','beam_near_edge_imaging', 'nei_beam_parameters',]
 
 def define_materials(materials_filename):
-    from pathlib2 import Path
+    from pathlib import Path
     import re
 
     def read_default():
@@ -128,7 +128,7 @@ def define_materials(materials_filename):
             materials = read_materials_file(materials_filename.lower())
             if len(materials) == 0:
                 raise Exception('The specified file is EMPTY.')
-        except:
+        except (FileNotFoundError, Exception):
             print(materials_filename + '.txt cannot be read in properly.\nPlease define in the pop-up window')
             gui_get_materials()
             materials = read_materials_file('last')
@@ -470,7 +470,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
     if arrangement_type == 'file':
         try:
             arrangement = get_arrangement(path)
-        except:
+        except (FileNotFoundError, KeyError, Exception):
             # window for get_arrangement
             print(
                 '(nei_get_arrangement)The "arrangement.dat" file either does not exist in the specified directory, or has errors in it.\n'
@@ -880,7 +880,7 @@ def beam_edges(flat_dark, threshold, no_fit=False, Verbose=False, poly_deg=5):
     for ind_x in range(nx):  # loop through x axis
         try:
             y_peak, y_top, y_bot = find_peak(flat_dark, ind_x)
-        except:
+        except (ValueError, RuntimeError):
             y_peak, y_top, y_bot = find_peak(flat_dark, ind_x - 1)
         top_positions.append(y_top)
         bot_positions.append(y_bot)
@@ -1201,7 +1201,7 @@ def signal_noise_ratio(mu_rhos, mu_t, rho_t, beam_parameters, tomo_data, use_tor
     """
     try:
         import torch
-    except:
+    except ImportError:
         print('(signal_noise_ratio) Module pytorch is not available. Numpy will be used instead.')
         use_torch = False
 

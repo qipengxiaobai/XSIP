@@ -10,8 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from scipy import misc
-
 
 def plot(x):
     plt.figure()
@@ -55,6 +53,7 @@ def choose_file():
     root = tkinter.Tk()
     root.withdraw()
     file = filedialog.askopenfilename(title='Please select file')
+    root.destroy()
     return file
 
 
@@ -122,7 +121,7 @@ def class_to_dict(obj):
         for key, value in obj.items():
             obj[key] = class_to_dict(value)
         return obj
-    except:
+    except AttributeError:
         return obj
 
 
@@ -144,7 +143,7 @@ def load_object(fname=''):
             obj = pickle.load(input)
             if isinstance(obj, dict):
                 obj = dict_to_class(obj)
-        except: # if it is an image
+        except (pickle.UnpicklingError, EOFError, AttributeError, ImportError): # if it is an image
             obj = imageio.imread(input)
     return obj
 
