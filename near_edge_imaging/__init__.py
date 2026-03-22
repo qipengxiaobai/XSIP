@@ -1083,8 +1083,8 @@ def calculate_rhot(mu_rhos, mu_t, beam, names, algorithm='', use_torch=True):
         use_torch = False
 
     if algorithm == '':
-        algorithm = input('Choose algorithm from:  "nnls", "sKES_equation"\n'
-                          '(type and enter): ')
+        algorithm = 'sKES_equation'
+        print('(calculate_rhot) No algorithm specified, defaulting to "sKES_equation"')
 
     nm = mu_rhos.shape[0]  # number of materials
 

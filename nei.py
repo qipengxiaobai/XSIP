@@ -7,7 +7,7 @@ import copy
 import math_physics as mp
 import os
 
-os.chdir(os.path.dirname(mp.__file__))  # Set Current Working Directory to the spectral_KES module directory
+_MODULE_DIR = os.path.dirname(os.path.abspath(mp.__file__))  # Module directory for relative path resolution
 
 
 def nei(materials='', data_path='', save_path='', algorithm='sKES_equation', multislice=True,
