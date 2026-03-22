@@ -8,36 +8,8 @@ from matplotlib.figure import Figure
 import threading
 
 
-def read_default():
-    with open(Path('MU/materials/default.txt'), 'r') as file:
-        content = file.read().upper()
-    materials = re.split('\s*\n\s*', content)
-    return materials
 
-
-def read_materials_file(filename,verbose=False):
-    with open(Path('MU/materials/' + filename + '.txt'), 'r') as file:
-        content = file.read().upper()
-    materials = re.split('\s*\n\s*', content)
-    return materials
-
-
-def input_materials():
-    materials = input('\nPlease input the names of the materials to investigate.\n'
-                      'For example: K2SeO4 Se-Meth, Water\n'
-                      'Or press Enter to skip\n')
-    materials = re.findall(r"[\w'-]+", materials)
-    return materials
-
-
-def write_materials_file(materials, filename):
-    filename = filename.lower()
-    with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
-        if isinstance(materials, str):
-            file.write(materials)
-        else:
-            file.write('\n'.join(materials))
-    return
+# read_materials_file and write_materials_file are imported from near_edge_imaging via nei
 
 
 class gui_get_materials:

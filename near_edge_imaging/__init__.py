@@ -17,37 +17,27 @@ from pathlib import Path
 #            'nei_get_arrangement','read_average_tifs','get_tomo_files','nei_determine_murhos',
 #            'get_beam_files','nei','beam_near_edge_imaging', 'nei_beam_parameters',]
 
-def define_materials(materials_filename):
-    from pathlib import Path
+def read_materials_file(filename):
+    """Read a materials file from the MU/materials directory."""
     import re
+    with open(Path('MU/materials/' + filename + '.txt'), 'r') as file:
+        content = file.read().upper()
+    materials = re.split(r'\s*\n\s*', content)
+    return materials
 
-    def read_default():
-        with open(Path('MU/materials/default.txt'), 'r') as file:
-            content = file.read().upper()
-        materials = re.split('\s*\n\s*', content)
-        return materials
 
-    def read_materials_file(filename):
-        with open(Path('MU/materials/' + filename + '.txt'), 'r') as file:
-            content = file.read().upper()
-        materials = re.split('\s*\n\s*', content)
-        return materials
+def write_materials_file(materials, filename):
+    """Write materials to a file in the MU/materials directory."""
+    filename = filename.lower()
+    with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
+        if isinstance(materials, str):
+            file.write(materials)
+        else:
+            file.write('\n'.join(materials))
 
-    def input_materials():
-        materials = input('\nPlease input the names of the materials to investigate.\n'
-                          'For example: K2SeO4 Se-Meth, Water\n'
-                          'Or press Enter to skip\n')
-        materials = re.findall(r"[\w'-]+", materials)
-        return materials
 
-    def write_materials_file(materials, filename):
-        filename = filename.lower()
-        with open(Path('MU/materials/' + filename + '.txt'), 'w') as file:
-            if isinstance(materials, str):
-                file.write(materials)
-            else:
-                file.write('\n'.join(materials))
-        return
+def define_materials(materials_filename):
+    import re
 
     class gui_get_materials:
         """docstring"""
