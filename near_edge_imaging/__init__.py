@@ -215,7 +215,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
             energy_range_low = float(data['energy_range_low'])
             energy_range_high = float(data['energy_range_high'])
 
-            self.diffaction_plane = data['diffraction_plane']
+            self.diffraction_plane = data['diffraction_plane']
             self.type = data['type']
             self.chi_degrees = float(data['chi_degrees'])
             self.hkl = [h, k, l]
@@ -410,7 +410,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
 
             ######################### get the values  ####################
 
-            # self.diffaction_plane = self.diffPlane.get()
+            # self.diffraction_plane = self.diffPlane.get()
             # self.type = self.aName.get()
             # self.chi_degrees = self.chi.get()
             # self.hkl = [self.h.get(), self.k.get(), self.l.get()]
@@ -432,7 +432,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
             # mainloop()
 
         def confirm(self):
-            #     self.diffaction_plane = self.diffPlane
+            #     self.diffraction_plane = self.diffPlane
             #     self.type = self.aName
             #     self.chi_degrees = self.chi
             #     self.hkl = [self.h, self.k, self.l]
@@ -483,7 +483,7 @@ def nei_get_arrangement(path, save_path='', arrangement_type='file'):
         arrangement = get_arrangement(save_path)
         print(save_path)
 
-    arrangement_parameters = {'diffaction_plane': ' DIFFRACTION PLANE:',
+    arrangement_parameters = {'diffraction_plane': ' DIFFRACTION PLANE:',
                               'type': ' TYPE:',
                               'chi_degrees': ' ASYMMETRY ANGLE (CHI):',
                               'hkl': ' HKL:',
@@ -1328,24 +1328,24 @@ def idl_recon(sinogram, pixel_size, center=0):
     return recon
 
 
-def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter='ramp', center=0, degrees=180, circle=True):
+def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter_name='ramp', center=0, degrees=180, circle=True):
     """
     CT reconstruction using Inverse Radon Transform, with Filtered Back Projection algorithm.
     See "radon_transform" in skimage.transform for more detail.
     Parameters
     ----------
     sinogram : 3d or 2d-array [(n_something),n_projections (n_angles),n_horizontal_positions]
-    pixel_size : float. 
+    pixel_size : float.
         Pixel size (resolution) of the detector in centimeter. For example: 0.0009 for 9um.
-    output_size : int, optional. 
+    output_size : int, optional.
         The width of the output reconstruction image. If output_size not specified, use the image horizontal width.
-    filter : str, default 'ramp'. 
+    filter_name : str, default 'ramp'.
         The filter used for reconstruction. Please see "radon_transform" in skimage.transform for more detail. Todo: reference to radon_transform
-    center : int, default 0. 
+    center : int, default 0.
         The rotation center in pixel during CT imaging. If 0, the horizontal center pixel in the image is used as the rotation center. Positive integer means the number of pixels to the right of the horizontal center of the image. Negative integer means the number of pixels to the left of the horizontal center of the image
-    degrees : int, {180,360}. 
+    degrees : int, {180,360}.
         Either a 180 degree CT or a 360 degree CT.
-    circle : bool, optional. 
+    circle : bool, optional.
         Assume the reconstructed image is zero outside the inscribed circle. The default behavior (None) is equivalent to False.
     Returns
     -------
@@ -1359,7 +1359,7 @@ def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter='ramp', cen
         recon = []
         for i in range(sinogram.shape[0]):
             recon.append(skimage_recon(sinogram[i], pixel_size=pixel_size,
-                                       output_size=output_size, filter=filter, center=center,
+                                       output_size=output_size, filter_name=filter_name, center=center,
                                        circle=circle))
         recon = np.array(recon)
         return recon
@@ -1377,7 +1377,7 @@ def skimage_recon(sinogram, pixel_size=1.0, output_size=None, filter='ramp', cen
         output_size = sinogram.shape[1]
     sinogram = sinogram.transpose(1, 0)  # transpose row and column to meet the order in skimage.transform.
     theta = np.linspace(0, degrees, n_proj)  # make the angles of projections from 0 to 180 degree
-    recon = iradon(sinogram, theta=theta, output_size=output_size, filter=filter, circle=circle) #center_drift=center
+    recon = iradon(sinogram, theta=theta, output_size=output_size, filter=filter_name, circle=circle) #center_drift=center
     # correct result with pixel size (cm).
     recon = recon / pixel_size
     print('...Finished')

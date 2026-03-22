@@ -11,7 +11,7 @@ _MODULE_DIR = os.path.dirname(os.path.abspath(mp.__file__))  # Module directory 
 
 
 def nei(materials='', data_path='', save_path='', algorithm='sKES_equation', multislice=True,
-        slice=0, n_proj=900, ct=False, side_width=0,
+        slice_num=0, n_proj=900, ct=False, side_width=0,
         e_range=0, lowpass=False, use_torch=True, use_file=True, arrangement_type='file',
         fix_vertical_motion=False, reconstruction=None, ct_center=0, snr=False,
         save=True, clip=False, flip=False, width_factor=1.0,
@@ -42,7 +42,7 @@ def nei(materials='', data_path='', save_path='', algorithm='sKES_equation', mul
     :param n_proj: The number of projection images for one slice of CT imaging.
     :param multislice: If True, meaning the images in the "tomo" folder contain more than one slice of CT. The 'n_proj'
                        and 'slice' needs to be specified.
-    :param slice: Which slice do we want to do the reconstruction.
+    :param slice_num: Which slice do we want to do the reconstruction.
     :param e_range: The energy range we want to use. Default 0, meaning the "energy_range" in "arrangement.dat" file
                     will be used as the energy range. If not 0, this will overwrite the energy range from "arrangement.dat".
     :param lowpass: Use a lowpass filter(gaussian) on the $\mu t$ from experiment. Default is False for now(20180905)
@@ -168,7 +168,7 @@ def nei(materials='', data_path='', save_path='', algorithm='sKES_equation', mul
     #     for s in slices:
     #####################    get tomo data               ########################
     print('\n(nei) Running "get_tomo_files"')
-    tomo_data = get_tomo_files(data_path, multislice=multislice, slice=slice, n_proj=n_proj)
+    tomo_data = get_tomo_files(data_path, multislice=multislice, slice=slice_num, n_proj=n_proj)
 
     ####################  calculate -ln(r)=  mu/rho * rho * t   #################
     print('\n(nei) Running "calculate_mut"')
@@ -277,7 +277,7 @@ if __name__ == '__main__':
     result = nei(materials=['I','Water'],
                  data_path=r'H:\1_PhD_data\2015-08-14-C2-SpectralData-Arash',
                  multislice=True,  # Whether the imaging data is from a multislice scan
-                 slice=0,  # If `multislice==True`, provide the number of slice to analyze (starting from 0)
+                 slice_num=0,  # If `multislice==True`, provide the number of slice to analyze (starting from 0)
                  n_proj=900,  # The number of projection images per slice
                  ct=True,  # Whether this is a CT scan. If `True`, `side_width` will be used.
                  side_width=20,  # The number of pixels used on the side.

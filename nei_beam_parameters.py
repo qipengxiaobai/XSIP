@@ -21,7 +21,7 @@ def nei_beam_parameters(beam_files, setup, detector, fix_vertical_motion=False,
     chi_degrees = setup.chi_degrees
     energy = setup.energy  # edge energy
     dist_fd = setup.dist_fd
-    diffraction_plane = setup.diffaction_plane
+    diffraction_plane = setup.diffraction_plane
     e_range = setup.energy_range
 
     pixel = detector.pixel
